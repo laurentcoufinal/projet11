@@ -1,0 +1,86 @@
+<mxfile host="app.diagrams.net" agent="audit-si" version="22.1.0">
+  <diagram id="flux-dependances" name="Flux de dépendances">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Flux principaux du SI — Groupe Retail Sphère" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="280" y="15" width="500" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="flux1" value="Flux 1 — Parcours client (priorité haute)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1080" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1-fe" value="Front-end&#xa;e-commerce" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="flux1">
+          <mxGeometry x="40" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1-cat" value="Service&#xa;Catalogue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux1">
+          <mxGeometry x="220" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1-cmd" value="Service&#xa;Commandes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux1">
+          <mxGeometry x="400" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1-pay" value="API&#xa;Paiement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="flux1">
+          <mxGeometry x="580" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1-bdd" value="PostgreSQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="flux1">
+          <mxGeometry x="760" y="45" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="f1e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux1" source="f1-fe" target="f1-cat"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux1" source="f1-fe" target="f1-cmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux1" source="f1-cmd" target="f1-pay"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f1e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux1" source="f1-cmd" target="f1-bdd"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="flux2" value="Flux 2 — Gestion des stocks (priorité haute)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="1080" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="f2-cmd" value="Service&#xa;Commandes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux2">
+          <mxGeometry x="200" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f2-stk" value="Service&#xa;Stock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux2">
+          <mxGeometry x="420" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f2-bdd" value="PostgreSQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="flux2">
+          <mxGeometry x="640" y="45" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="f2e1" value="mise à jour stock" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux2" source="f2-cmd" target="f2-stk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f2e2" value="persistance" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux2" source="f2-stk" target="f2-bdd"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="flux3" value="Flux 3 — Back-office" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="1080" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="f3-bo" value="Back-office&#xa;interne" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="flux3">
+          <mxGeometry x="80" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f3-cat" value="Service&#xa;Catalogue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux3">
+          <mxGeometry x="300" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f3-cmd" value="Service&#xa;Commandes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux3">
+          <mxGeometry x="520" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f3-stk" value="Service&#xa;Stock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="flux3">
+          <mxGeometry x="740" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f3e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux3" source="f3-bo" target="f3-cat"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f3e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux3" source="f3-bo" target="f3-cmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="f3e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="flux3" source="f3-bo" target="f3-stk"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="flux4" value="Flux 4 — Reporting (batch)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="510" width="1080" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4-bdd" value="PostgreSQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="flux4">
+          <mxGeometry x="280" y="45" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4-rpt" value="Outil de reporting&#xa;(Python ETL)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="flux4">
+          <mxGeometry x="560" y="50" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="f4e1" value="lecture batch" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="flux4" source="f4-bdd" target="f4-rpt"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="legend" value="Priorité : Flux 1 et 2 (commandes, stock) &gt; Flux 3 (back-office) &gt; Flux 4 (reporting batch)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="700" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

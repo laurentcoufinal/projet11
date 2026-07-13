@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="architecture-cible" version="22.1.0">
+  <diagram id="arch-applicative" name="Architecture applicative cible">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="900">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Architecture applicative cible — UML composants" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="280" y="15" width="500" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="layer-pres" value="Présentation" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1080" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="react" value="Front-end e-commerce&#xa;(React)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="layer-pres">
+          <mxGeometry x="200" y="35" width="150" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="angular" value="Back-office&#xa;(Angular)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="layer-pres">
+          <mxGeometry x="700" y="35" width="150" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="layer-gw" value="Point d'entrée" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="175" width="1080" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="gateway" value="API Gateway&#xa;(Spring Cloud Gateway)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="layer-gw">
+          <mxGeometry x="420" y="30" width="220" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="layer-svc" value="Services métier (bounded contexts)" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="1080" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="svc-cat" value="Service Catalogue&#xa;(Spring Boot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="layer-svc">
+          <mxGeometry x="120" y="40" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="svc-cmd" value="Service Commandes&#xa;(Spring Boot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="layer-svc">
+          <mxGeometry x="450" y="40" width="160" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="svc-stk" value="Service Stock&#xa;(Spring Boot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="layer-svc">
+          <mxGeometry x="780" y="40" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="layer-infra" value="Infrastructure" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;startSize=28;" vertex="1" parent="1">
+          <mxGeometry x="40" y="420" width="1080" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="rabbit" value="RabbitMQ&#xa;(événements)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="layer-infra">
+          <mxGeometry x="120" y="45" width="130" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="bdd-cat" value="PostgreSQL&#xa;Catalogue" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="layer-infra">
+          <mxGeometry x="320" y="40" width="110" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="bdd-cmd" value="PostgreSQL&#xa;Commandes" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="layer-infra">
+          <mxGeometry x="480" y="40" width="110" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="bdd-stk" value="PostgreSQL&#xa;Stock" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="layer-infra">
+          <mxGeometry x="640" y="40" width="110" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="cdc" value="Debezium&#xa;(CDC)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="layer-infra">
+          <mxGeometry x="800" y="45" width="100" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="metabase" value="Metabase&#xa;(BI)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="layer-infra">
+          <mxGeometry x="930" y="45" width="100" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="paiement" value="API Paiement&#xa;(externe)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;" vertex="1" parent="layer-infra">
+          <mxGeometry x="800" y="110" width="130" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e-fe-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="react" target="gateway"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-bo-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="angular" target="gateway"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-gw-cat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="gateway" target="svc-cat"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-gw-cmd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="gateway" target="svc-cmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-gw-stk" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="gateway" target="svc-stk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-cmd-rabbit" value="publish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="svc-cmd" target="rabbit"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-rabbit-stk" value="consume" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="rabbit" target="svc-stk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-cmd-paiement" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="svc-cmd" target="paiement"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-cat-bdd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="svc-cat" target="bdd-cat"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-cmd-bdd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="svc-cmd" target="bdd-cmd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-stk-bdd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="svc-stk" target="bdd-stk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e-cdc-meta" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="cdc" target="metabase"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
