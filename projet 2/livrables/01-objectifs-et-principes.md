@@ -4,6 +4,52 @@ Document de cadrage de l'architecture cible, issu de l'audit du SI existant ([`p
 
 ---
 
+## Méthode — Synergetic Blueprint
+
+Le **Synergetic Blueprint** est un processus structuré d'application du **Domain-Driven Design (DDD)**, de l'intention métier jusqu'à une architecture et un plan d'intégration traçables. Il organise les techniques DDD (capabilities, Domain Storytelling, EventStorming, Context Map, modèle de domaine, Example Mapping…) en un fil conducteur cohérent, publié par Michael Junker (*Mastering Domain-Driven Design*, 2025) et étendu dans *DDD Toolbox* (2026).
+
+### Les 4 zones et 12 étapes
+
+| Zone | Étapes | Techniques / outputs |
+|------|--------|----------------------|
+| **Design stratégique — Idéation** | 1 à 3 | North Star, Business Model Canvas, capability map, premières frontières de domaine |
+| **Design stratégique — Exigences** | 4 à 7 | Domain Storytelling, Visual Glossary, EventStorming, Event Modeling, user stories |
+| **Design stratégique — Solution Design** | 8 | Context Map, patterns d'intégration, spécification architecturale |
+| **Design tactique** | 9 à 12 | Modèle de domaine, contrats API/événements, Example Mapping, implémentation et documentation |
+
+Les numéros d'étapes indiquent un **ordre de lecture**, pas une exécution séquentielle rigide. Les découvertes en aval (par exemple un EventStorming) peuvent remettre en cause les artefacts amont (par exemple la capability map).
+
+### Application au projet Groupe Retail Sphère
+
+| Phase projet | Étapes Blueprint | Livrable(s) |
+|---|---|---|
+| Phase 0 — Cadrage | Amont (pré-Blueprint) | [`01-objectifs-et-principes.md`](01-objectifs-et-principes.md) |
+| Phase 1 — Idéation | 1-3 | [`02-ideation-capabilities.md`](02-ideation-capabilities.md) |
+| Phase 2 — Exigences | 4-7 | [`03-glossaire-domaine.md`](03-glossaire-domaine.md), [`04-user-stories.md`](04-user-stories.md), [`05-event-storming.md`](05-event-storming.md) |
+| Phase 3 — Solution Design | 8 | [`06-context-map.drawio`](06-context-map.drawio) |
+| Phases 4-5 — Architecture | Complément besoin2 | [`07`](07-architecture-applicative.drawio) à [`10`](10-architecture-deploiement.drawio) |
+| Phase 6 — Design tactique | 9-11 | [`11-modele-domaine.md`](11-modele-domaine.md), [`12-contrats-api.md`](12-contrats-api.md) |
+| Phase 7 — Intégration | 12 | [`13-plan-integration.md`](13-plan-integration.md), [`document-architecture-cible.md`](document-architecture-cible.md) |
+
+Le détail opérationnel des phases est décrit dans [`roadmap.md`](roadmap.md).
+
+```mermaid
+flowchart LR
+    cadrage["Phase0 Cadrage"]
+    ideation["Etapes1-3 Ideation"]
+    exigences["Etapes4-7 Exigences"]
+    solution["Etape8 ContextMap"]
+    archi["Architecture cible"]
+    tactique["Etapes9-11 Design tactique"]
+    integration["Etape12 Integration"]
+
+    cadrage --> ideation --> exigences --> solution --> archi --> tactique --> integration
+```
+
+Les **objectifs (O1-O5)** et **principes d'architecture** définis ci-dessous servent de fondation aux étapes Blueprint suivantes — en particulier le principe 4 (langage ubiquitaire), qui prépare directement l'étape 5 (Visual Glossary).
+
+---
+
 ## Problèmes principaux identifiés
 
 | # | Problème | Source audit |
