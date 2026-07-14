@@ -18,10 +18,32 @@
 
 ### Critères d'acceptation
 
-- [ ] Le client peut parcourir la liste des produits avec référence, prix et description
-- [ ] Le temps de chargement de la page catalogue est inférieur à 2 secondes en conditions normales
-- [ ] Les données affichées proviennent exclusivement du contexte Catalogue
-- [ ] Aucune donnée de stock ou de commande n'est requise pour afficher le catalogue
+```gherkin
+Fonctionnalité: Consultation du catalogue
+  En tant que client final
+  Je veux consulter le catalogue produit en ligne
+  Afin d'identifier les produits disponibles avant de passer commande
+
+  Scénario: Parcourir la liste des produits
+    Étant donné que je suis un client final sur le site
+    Quand j'accède à la page catalogue
+    Alors je vois pour chaque produit sa référence, son prix et sa description
+
+  Scénario: Temps de chargement acceptable
+    Étant donné des conditions normales de charge
+    Quand j'accède à la page catalogue
+    Alors la page s'affiche en moins de 2 secondes
+
+  Scénario: Données issues du contexte Catalogue uniquement
+    Étant donné que le catalogue contient des produits publiés
+    Quand j'accède à la page catalogue
+    Alors les données affichées proviennent exclusivement du contexte Catalogue
+
+  Scénario: Affichage sans dépendance aux contextes Stock et Commandes
+    Étant donné que les contextes Stock et Commandes sont indisponibles
+    Quand j'accède à la page catalogue
+    Alors le catalogue s'affiche correctement sans requête de stock ni de commande
+```
 
 ---
 
@@ -39,11 +61,53 @@
 
 ### Critères d'acceptation
 
-- [ ] Le client peut créer une commande à partir de produits du catalogue
-- [ ] Le paiement transite exclusivement par l'API externe de paiement
-- [ ] La commande est confirmée au client avant la réservation stock (traitement asynchrone)
-- [ ] En période de pic de charge, le client reçoit une confirmation de commande en moins de 3 secondes
-- [ ] La réservation stock est déclenchée par événement après confirmation, sans bloquer la réponse client
+```gherkin
+Fonctionnalité: Passage de commande avec paiement
+  En tant que client final
+  Je veux passer une commande et payer en ligne
+  Afin d'acquérir les produits sélectionnés
+
+  Scénario: Créer une commande à partir du catalogue
+    Étant donné que j'ai sélectionné des produits du catalogue
+    Quand je valide ma commande
+    Alors une commande est créée avec les produits sélectionnés
+
+  Scénario: Paiement via l'API externe uniquement
+    Étant donné que j'ai une commande en attente de paiement
+    Quand je procède au paiement
+    Alors le paiement transite exclusivement par l'API externe de paiement
+    Et aucun traitement de carte bancaire n'est effectué dans le service Commandes
+
+  Scénario: Confirmation client avant réservation stock
+    Étant donné que j'ai validé le paiement de ma commande
+    Quand le paiement est accepté
+    Alors je reçois immédiatement le message « Commande confirmée »
+    Et la réservation stock est effectuée environ 2 secondes plus tard
+
+  Scénario: Temps de réponse en période de pic
+    Étant donné une période de pic avec 500 commandes simultanées
+    Quand je valide ma commande et mon paiement
+    Alors je reçois une confirmation de commande en moins de 3 secondes
+    Et le 95e percentile des temps de réponse est inférieur à 3 secondes
+
+  Scénario: Réservation stock déclenchée par événement
+    Étant donné que ma commande est confirmée
+    Quand l'événement CommandeConfirmee est publié
+    Alors la réservation stock est déclenchée de manière asynchrone
+    Et la réponse au client n'est pas bloquée par la réservation
+
+  Scénario: Paiement refusé
+    Étant donné que j'ai une commande en attente de paiement
+    Quand le paiement est refusé par l'API externe
+    Alors ma commande reste au statut « En attente »
+    Et aucune réservation stock n'est créée
+
+  Scénario: Stock insuffisant après confirmation
+    Étant donné que ma commande est confirmée
+    Quand le stock disponible est insuffisant pour honorer la commande
+    Alors l'événement StockInsuffisant est publié
+    Et l'équipe interne reçoit une alerte
+```
 
 ---
 
@@ -61,10 +125,33 @@
 
 ### Critères d'acceptation
 
-- [ ] L'équipe interne peut consulter et modifier les niveaux de stock par produit et par lieu
-- [ ] Le contexte Stock est la source unique de vérité pour les quantités disponibles
-- [ ] Une réservation est automatiquement créée à la réception d'un événement `CommandeConfirmee`
-- [ ] Les écarts entre stock affiché et commandes en cours sont inférieurs à 1 % sur une période de 24 h
+```gherkin
+Fonctionnalité: Gestion des stocks
+  En tant que membre de l'équipe interne
+  Je veux gérer les niveaux de stock des produits en entrepôts et magasins
+  Afin de garantir la disponibilité des produits commandés
+
+  Scénario: Consulter et modifier les niveaux de stock
+    Étant donné que je suis un membre de l'équipe interne authentifié
+    Quand j'accède à la gestion des stocks pour un produit et un lieu donnés
+    Alors je peux consulter le niveau de stock actuel
+    Et je peux modifier ce niveau de stock
+
+  Scénario: Stock comme source unique de vérité
+    Étant donné qu'un produit est référencé dans plusieurs contextes
+    Quand une quantité disponible est consultée pour ce produit
+    Alors la quantité provient exclusivement du contexte Stock
+
+  Scénario: Réservation automatique à la confirmation de commande
+    Étant donné qu'un événement CommandeConfirmee est reçu pour une commande
+    Quand le contexte Stock traite cet événement
+    Alors une réservation est automatiquement créée pour les produits commandés
+
+  Scénario: Cohérence stock et commandes en cours
+    Étant donné une période de 24 heures d'activité normale
+    Quand les écarts entre le stock affiché et les commandes en cours sont mesurés
+    Alors ces écarts sont inférieurs à 1 %
+```
 
 ---
 
@@ -82,10 +169,32 @@
 
 ### Critères d'acceptation
 
-- [ ] L'équipe métier accède à des tableaux de bord via l'outil de reporting
-- [ ] Les indicateurs (chiffre d'affaires, volume commandes, niveaux stock) ont une fraîcheur inférieure à 15 minutes
-- [ ] Le reporting fonctionne en lecture seule, sans impact sur les transactions opérationnelles
-- [ ] L'ETL batch existant reste disponible en parallèle pendant la phase de transition
+```gherkin
+Fonctionnalité: Pilotage de l'activité
+  En tant que membre de l'équipe métier
+  Je veux consulter des indicateurs de performance actualisés
+  Afin de piloter l'activité commerciale de manière fiable
+
+  Scénario: Accès aux tableaux de bord
+    Étant donné que je suis un membre de l'équipe métier authentifié
+    Quand j'accède à l'outil de reporting
+    Alors je peux consulter les tableaux de bord de pilotage
+
+  Scénario: Fraîcheur des indicateurs
+    Étant donné que des transactions opérationnelles ont eu lieu récemment
+    Quand je consulte les indicateurs de chiffre d'affaires, de volume de commandes et de niveaux de stock
+    Alors ces indicateurs ont une fraîcheur inférieure à 15 minutes
+
+  Scénario: Reporting en lecture seule
+    Étant donné que le reporting est consulté pendant une période de charge opérationnelle
+    Quand l'équipe métier consulte les tableaux de bord
+    Alors les transactions opérationnelles ne sont pas impactées par la consultation
+
+  Scénario: ETL batch disponible en parallèle
+    Étant donné que le système est en phase de transition
+    Quand l'équipe métier utilise l'outil de reporting
+    Alors l'ETL batch existant reste disponible en parallèle
+```
 
 ---
 
