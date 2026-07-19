@@ -252,12 +252,69 @@ Fichier source éditable : [diagrammes/flux-dependances.drawio](diagrammes/flux-
 
 ## 6. Benchmark technologique
 
-| Problème | Techno actuelle | Alternative recommandée | Objectif |
-|----------|----------------|------------------------|----------|
-| Couplage Commandes/Stock | REST synchrone | Messagerie asynchrone par événements | Performance, cohérence |
-| Hétérogénéité (PHP) | Service Stock en PHP | Alignement Java Spring Boot | Maintenabilité |
-| BDD unique | PostgreSQL partagée | BDD par service (Stock, Commandes) | Cohérence, évolutivité |
-| Reporting batch | Python ETL | CDC + outil BI en complément | Pilotage temps réel |
+| Problème | Techno actuelle | Alternative recommandée | Solutions existantes | Objectif |
+|----------|----------------|------------------------|----------------------|----------|
+| Couplage Commandes/Stock | REST synchrone | Messagerie asynchrone par événements | **RabbitMQ**, **Apache Kafka** | Performance, cohérence |
+| Hétérogénéité (PHP) | Service Stock en PHP | Alignement Java Spring Boot | **Spring Boot**, **Quarkus** | Maintenabilité |
+| BDD unique | PostgreSQL partagée | BDD par service (Stock, Commandes) | **PostgreSQL** (instances dédiées), **MySQL** | Cohérence, évolutivité |
+| Reporting batch | Python ETL | CDC + outil BI en complément | **Debezium**, **Metabase** | Pilotage temps réel |
+
+### Comparaison des solutions concrètes
+
+#### Messagerie — RabbitMQ vs Apache Kafka
+
+| Critère | RabbitMQ | Apache Kafka |
+|---------|----------|--------------|
+| Complexité | Faible à modérée | Élevée (cluster, topics, retention) |
+| Volumes | Adapté aux volumes actuels Commandes→Stock | Orienté très haut débit / log d'événements |
+| Compétences | Courbe d'apprentissage raisonnable | Expertise ops plus lourde |
+| Migration progressive | Intégration progressive simple | Plus lourd à introduire |
+
+**Recommandation** : **RabbitMQ** — volumes et contrainte de migration progressive ne justifient pas Kafka.
+
+#### Stack Java — Spring Boot vs Quarkus
+
+| Critère | Spring Boot | Quarkus |
+|---------|-------------|---------|
+| Continuité | Déjà utilisé (Service Catalogue) | Nouveau socle à apprendre |
+| Écosystème | Mature, large documentation | Cloud-native, démarrage rapide |
+| Migration Stock | Capitalisation compétences existantes | Double courbe (framework + migration PHP) |
+| Maintenabilité | Unifie Catalogue / Stock / Commandes | Risque de nouvelle hétérogénéité |
+
+**Recommandation** : **Spring Boot** — alignement sur l'existant Catalogue.
+
+#### BDD par service — PostgreSQL vs MySQL
+
+| Critère | PostgreSQL (instances dédiées) | MySQL |
+|---------|--------------------------------|-------|
+| Continuité | Déjà en production | Changement de moteur |
+| Compétences | Équipes déjà formées | Nouvelle expertise |
+| Isolation | Une instance / schéma par service | Équivalent possible |
+| Risque migration | Principalement découpage données | Découpage + conversion techno |
+
+**Recommandation** : **PostgreSQL** (instances dédiées) — continuité et moindre risque.
+
+#### Reporting — Debezium (CDC) et Metabase (BI)
+
+Ces deux solutions sont **complémentaires** (pas concurrentes) : Debezium capture les changements, Metabase les visualise.
+
+| Critère | Debezium | Metabase |
+|---------|----------|----------|
+| Rôle | CDC — capture des changements BDD | BI — tableaux de bord métier |
+| Fraîcheur | Quasi temps réel | Consomme le flux CDC |
+| Impact transactionnel | Lecture seule (logs/replication) | Aucun (lecture) |
+| Transition | Complète l'ETL, ne le remplace pas d'emblée | Interface équipes métiers |
+
+**Recommandation** : **Debezium + Metabase** en complément de l'ETL Python pendant la transition.
+
+#### Synthèse des solutions retenues
+
+| Domaine | Solution retenue |
+|---------|------------------|
+| Messagerie | RabbitMQ |
+| Stack services | Spring Boot |
+| BDD | PostgreSQL par service |
+| Reporting | Debezium + Metabase |
 
 Toutes les recommandations respectent les contraintes : système opérationnel pendant les évolutions, pas de refonte complète immédiate, appropriation progressive par les équipes.
 

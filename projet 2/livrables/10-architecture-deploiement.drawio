@@ -1,196 +1,253 @@
-<mxfile host="app.diagrams.net" agent="architecture-cible" version="22.1.0">
-  <diagram id="arch-deploiement" name="Architecture de déploiement">
-    <mxGraphModel dx="1400" dy="950" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-
-        <mxCell id="title" value="Architecture de déploiement — migration progressive (couche de découplage)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="320" y="15" width="760" height="30" as="geometry"/>
-        </mxCell>
-
-        <!-- Zone client -->
-        <mxCell id="client-zone" value="Zone client" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=28;" vertex="1" parent="1">
-          <mxGeometry x="40" y="55" width="180" height="100" as="geometry"/>
-        </mxCell>
-        <mxCell id="browser" value="Navigateur&#xa;(React / Angular)" style="shape=mxgraph.aws4.client;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="client-zone">
-          <mxGeometry x="30" y="35" width="120" height="55" as="geometry"/>
-        </mxCell>
-
-        <!-- Couche de découplage -->
-        <mxCell id="decoupling-zone" value="Couche de découplage (Strangler Fig + ACL)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;startSize=28;" vertex="1" parent="1">
-          <mxGeometry x="240" y="55" width="920" height="105" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-gateway" value="GatewayFacade&#xa;(Spring Cloud Gateway)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="decoupling-zone">
-          <mxGeometry x="25" y="38" width="150" height="52" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-router" value="Routeur adaptatif&#xa;(feature flags, %)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="decoupling-zone">
-          <mxGeometry x="195" y="38" width="155" height="52" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-adapters" value="Adaptateurs ACL&#xa;LegacySync · MessagingEvent · Legacy/Target Stock · Legacy/Target Commandes&#xa;PaymentAcl · LegacyEtl · CdcReporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;" vertex="1" parent="decoupling-zone">
-          <mxGeometry x="370" y="32" width="530" height="62" as="geometry"/>
-        </mxCell>
-
-        <!-- Zone legacy -->
-        <mxCell id="legacy-zone" value="Zone legacy (en retrait — pointillé)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;startSize=28;dashed=1;" vertex="1" parent="1">
-          <mxGeometry x="240" y="175" width="430" height="195" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-cmd-legacy" value="Container&#xa;Commandes Node.js&#xa;(LegacyCommandesAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" vertex="1" parent="legacy-zone">
-          <mxGeometry x="25" y="45" width="115" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-stk-legacy" value="Container&#xa;Stock PHP&#xa;(LegacyStockAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" vertex="1" parent="legacy-zone">
-          <mxGeometry x="155" y="45" width="115" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-etl-legacy" value="Container&#xa;ETL Python&#xa;(LegacyEtlAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" vertex="1" parent="legacy-zone">
-          <mxGeometry x="285" y="45" width="115" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="legacy-note" value="Retrait progressif V1 → V4" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2" vertex="1" parent="legacy-zone">
-          <mxGeometry x="25" y="130" width="375" height="20" as="geometry"/>
-        </mxCell>
-
-        <!-- Zone cible -->
-        <mxCell id="target-zone" value="Zone cible (Spring Boot — plein)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;startSize=28;" vertex="1" parent="1">
-          <mxGeometry x="690" y="175" width="470" height="195" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-catalogue" value="Container&#xa;Catalogue Spring Boot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="target-zone">
-          <mxGeometry x="25" y="45" width="130" height="55" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-cmd-target" value="Container&#xa;Commandes Spring Boot&#xa;(TargetCommandesAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="target-zone">
-          <mxGeometry x="170" y="45" width="130" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-stk-target" value="Container&#xa;Stock Spring Boot&#xa;(TargetStockAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="target-zone">
-          <mxGeometry x="315" y="45" width="130" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="target-note" value="Bascule progressive via routeur adaptatif" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2" vertex="1" parent="target-zone">
-          <mxGeometry x="25" y="130" width="420" height="20" as="geometry"/>
-        </mxCell>
-
-        <!-- Infrastructure -->
-        <mxCell id="infra-zone" value="Infrastructure (Docker)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;startSize=28;" vertex="1" parent="1">
-          <mxGeometry x="240" y="390" width="920" height="95" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-rabbit" value="Container&#xa;RabbitMQ&#xa;(MessagingEventAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="infra-zone">
-          <mxGeometry x="25" y="38" width="140" height="48" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-debezium" value="Container&#xa;Debezium&#xa;(CdcReportingAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="infra-zone">
-          <mxGeometry x="200" y="38" width="140" height="48" as="geometry"/>
-        </mxCell>
-        <mxCell id="c-metabase" value="Container&#xa;Metabase" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="infra-zone">
-          <mxGeometry x="375" y="38" width="130" height="48" as="geometry"/>
-        </mxCell>
-
-        <!-- Zone données -->
-        <mxCell id="data-zone" value="Zone données" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;startSize=28;" vertex="1" parent="1">
-          <mxGeometry x="1180" y="55" width="200" height="430" as="geometry"/>
-        </mxCell>
-        <mxCell id="db-cat" value="PostgreSQL&#xa;Catalogue" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="data-zone">
-          <mxGeometry x="50" y="45" width="100" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="db-cmd" value="PostgreSQL&#xa;Commandes" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="data-zone">
-          <mxGeometry x="50" y="130" width="100" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="db-stk" value="PostgreSQL&#xa;Stock" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="data-zone">
-          <mxGeometry x="50" y="215" width="100" height="65" as="geometry"/>
-        </mxCell>
-        <mxCell id="db-legacy" value="BDD unique&#xa;partagée (legacy)&#xa;en décommission V4" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" vertex="1" parent="data-zone">
-          <mxGeometry x="40" y="310" width="120" height="75" as="geometry"/>
-        </mxCell>
-        <mxCell id="data-note" value="Cible : 3 BDD dédiées" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2" vertex="1" parent="data-zone">
-          <mxGeometry x="25" y="395" width="150" height="20" as="geometry"/>
-        </mxCell>
-
-        <!-- Externe -->
-        <mxCell id="external" value="Externe" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;startSize=28;dashed=1;" vertex="1" parent="1">
-          <mxGeometry x="240" y="505" width="220" height="95" as="geometry"/>
-        </mxCell>
-        <mxCell id="api-pay" value="API Paiement&#xa;(prestataire tiers)&#xa;via PaymentAclAdapter" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#fff2cc;" vertex="1" parent="external">
-          <mxGeometry x="30" y="35" width="160" height="52" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : client → découplage -->
-        <mxCell id="e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="browser" target="c-gateway">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-gateway" target="c-router">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e3" value="contrats stables" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-router" target="c-adapters">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : adaptateurs → legacy (dashed) -->
-        <mxCell id="e4" value="LegacyCommandesAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-adapters" target="c-cmd-legacy">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e5" value="LegacyStockAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-adapters" target="c-stk-legacy">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e6" value="LegacyEtlAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-adapters" target="c-etl-legacy">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : adaptateurs → cible (solid) -->
-        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-adapters" target="c-catalogue">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e8" value="TargetCommandesAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-adapters" target="c-cmd-target">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e9" value="TargetStockAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-adapters" target="c-stk-target">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : messaging & reporting -->
-        <mxCell id="e10" value="MessagingEventAdapter (V1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-adapters" target="c-rabbit">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e11" value="CdcReportingAdapter (V3)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-adapters" target="c-debezium">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-debezium" target="c-metabase">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e13" value="LegacyEtlAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-etl-legacy" target="c-metabase">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : paiement -->
-        <mxCell id="e14" value="PaymentAclAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-cmd-legacy" target="api-pay">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e15" value="PaymentAclAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-cmd-target" target="api-pay">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : BDD cible -->
-        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-catalogue" target="db-cat">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-cmd-target" target="db-cmd">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" edge="1" parent="1" source="c-stk-target" target="db-stk">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Edges : BDD legacy (dashed) -->
-        <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-cmd-legacy" target="db-legacy">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" edge="1" parent="1" source="c-stk-legacy" target="db-legacy">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <!-- Légende -->
-        <mxCell id="legend" value="Légende migration :&#xa;— Plein = cible (Spring Boot, PostgreSQL dédié, CDC)&#xa;— Pointillé = legacy (Node.js, PHP, ETL, BDD unique) — retiré progressivement V1→V4&#xa;V1 : MessagingEventAdapter (async) | V2 : TargetStockAdapter | V3 : CdcReportingAdapter | V4 : GatewayFacade + TargetCommandesAdapter&#xa;Réf. : 13-plan-integration.md" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=11;" vertex="1" parent="1">
-          <mxGeometry x="40" y="620" width="680" height="85" as="geometry"/>
-        </mxCell>
-
-        <!-- Building blocks -->
-        <mxCell id="bb" value="Building blocks : Docker | PostgreSQL | RabbitMQ | Debezium | Metabase | Spring Cloud Gateway | Couche découplage (Strangler Fig + ACL)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;fontStyle=2" vertex="1" parent="1">
-          <mxGeometry x="40" y="720" width="900" height="30" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
+<mxfile host="65bd71144e">
+    <diagram id="arch-deploiement" name="Architecture de déploiement">
+        <mxGraphModel dx="1630" dy="1906" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Architecture de déploiement — migration progressive (couche de découplage)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="320" y="-130" width="760" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="client-zone" value="Zone client" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="10" y="20" width="180" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="browser" value="Navigateur&#10;(React / Angular)" style="shape=mxgraph.aws4.client;whiteSpace=wrap;html=1;fillColor=#fff2cc;" parent="client-zone" vertex="1">
+                    <mxGeometry x="30" y="35" width="120" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="decoupling-zone" value="Couche de découplage (Strangler Fig + ACL)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;startSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="205" y="-80" width="960" height="135" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-gateway" value="GatewayFacade&#10;(Spring Cloud Gateway)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="decoupling-zone" vertex="1">
+                    <mxGeometry x="25" y="38" width="150" height="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-router" value="Routeur adaptatif&#10;(feature flags, %)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="decoupling-zone" vertex="1">
+                    <mxGeometry x="195" y="38" width="155" height="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-adapters" value="Adaptateurs ACL&#10;LegacySync · MessagingEvent · Legacy/Target Stock · Legacy/Target Commandes&#10;PaymentAcl · LegacyEtl · CdcReporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=8;" parent="decoupling-zone" vertex="1">
+                    <mxGeometry x="472.5" y="33" width="475" height="62" as="geometry"/>
+                </mxCell>
+                <mxCell id="legacy-zone" value="Zone legacy (en retrait — pointillé)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;startSize=28;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="175" width="510" height="195" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-cmd-legacy" value="Container&#10;Commandes Node.js&#10;(LegacyCommandesAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" parent="legacy-zone" vertex="1">
+                    <mxGeometry x="10" y="45" width="150" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-stk-legacy" value="Container&#10;Stock PHP&#10;(LegacyStockAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" parent="legacy-zone" vertex="1">
+                    <mxGeometry x="170" y="45" width="115" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-etl-legacy" value="Container&#10;ETL Python&#10;(LegacyEtlAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" parent="legacy-zone" vertex="1">
+                    <mxGeometry x="340" y="45" width="115" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="legacy-note" value="Retrait progressif V1 → V4" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2" parent="legacy-zone" vertex="1">
+                    <mxGeometry x="25" y="175" width="375" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="target-zone" value="Zone cible (Spring Boot — plein)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;startSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="160" width="470" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-catalogue" value="Container&#10;Catalogue Spring Boot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="target-zone" vertex="1">
+                    <mxGeometry x="10" y="45" width="130" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-cmd-target" value="Container&#10;Commandes Spring Boot&#10;(TargetCommandesAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="target-zone" vertex="1">
+                    <mxGeometry x="150" y="45" width="150" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-stk-target" value="Container&#10;Stock Spring Boot&#10;(TargetStockAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="target-zone" vertex="1">
+                    <mxGeometry x="315" y="45" width="130" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="target-note" value="Bascule progressive via routeur adaptatif" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2" parent="target-zone" vertex="1">
+                    <mxGeometry x="25" y="190" width="420" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="infra-zone" value="Infrastructure (Docker)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;startSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="428" width="920" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-rabbit" value="Container&#10;RabbitMQ&#10;(MessagingEventAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" parent="infra-zone" vertex="1">
+                    <mxGeometry x="25" y="38" width="140" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-debezium" value="Container&#10;Debezium&#10;(CdcReportingAdapter)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="infra-zone" vertex="1">
+                    <mxGeometry x="200" y="38" width="140" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="c-metabase" value="Container&#10;Metabase" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="infra-zone" vertex="1">
+                    <mxGeometry x="420" y="38" width="130" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="data-zone" value="Zone données" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;startSize=28;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="10" width="200" height="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-cat" value="PostgreSQL&#10;Catalogue" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" parent="data-zone" vertex="1">
+                    <mxGeometry x="50" y="45" width="100" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-cmd" value="PostgreSQL&#10;Commandes" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" parent="data-zone" vertex="1">
+                    <mxGeometry x="50" y="145" width="100" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-stk" value="PostgreSQL&#10;Stock" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#fff2cc;strokeColor=#d6b656;" parent="data-zone" vertex="1">
+                    <mxGeometry x="50" y="300" width="100" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-legacy" value="BDD unique&#10;partagée (legacy)&#10;en décommission V4" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=12;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" parent="data-zone" vertex="1">
+                    <mxGeometry x="40" y="430" width="120" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="data-note" value="Cible : 3 BDD dédiées" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;fontStyle=2" parent="data-zone" vertex="1">
+                    <mxGeometry x="25" y="520" width="150" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="external" value="Externe" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;startSize=28;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="550" width="220" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-pay" value="API Paiement&#10;(prestataire tiers)&#10;via PaymentAclAdapter" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#fff2cc;" parent="external" vertex="1">
+                    <mxGeometry x="30" y="35" width="160" height="52" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="browser" target="c-gateway" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-gateway" target="c-router" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="contrats stables" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-router" target="c-adapters" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="620" y="-30"/>
+                            <mxPoint x="620" y="-30"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e4" value="LegacyCommandesAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-adapters" target="c-cmd-legacy" edge="1">
+                    <mxGeometry x="0.8427" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="820" y="30"/>
+                            <mxPoint x="370" y="30"/>
+                            <mxPoint x="370" y="160"/>
+                            <mxPoint x="263" y="160"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e5" value="LegacyStockAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-adapters" target="c-stk-legacy" edge="1">
+                    <mxGeometry x="0.3612" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="690" y="100"/>
+                            <mxPoint x="460" y="100"/>
+                            <mxPoint x="460" y="253"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e6" value="LegacyEtlAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-adapters" target="c-etl-legacy" edge="1">
+                    <mxGeometry x="0.4488" y="2" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="850" y="50"/>
+                            <mxPoint x="548" y="50"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-adapters" target="c-catalogue" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="890" y="110"/>
+                            <mxPoint x="765" y="110"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e8" value="TargetCommandesAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-adapters" target="c-cmd-target" edge="1">
+                    <mxGeometry x="0.3194" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="915" y="60"/>
+                            <mxPoint x="915" y="60"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9" value="TargetStockAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-adapters" target="c-stk-target" edge="1">
+                    <mxGeometry x="-0.1935" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="950" y="80"/>
+                            <mxPoint x="1070" y="80"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e10" value="MessagingEventAdapter (V1)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-adapters" target="c-rabbit" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="730" y="140"/>
+                            <mxPoint x="150" y="140"/>
+                            <mxPoint x="150" y="490"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e11" value="CdcReportingAdapter (V3)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-adapters" target="c-debezium" edge="1">
+                    <mxGeometry x="-0.2468" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="630" y="480"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-debezium" target="c-metabase" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" value="LegacyEtlAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-etl-legacy" target="c-metabase" edge="1">
+                    <mxGeometry x="-0.085" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="725" y="280"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e14" value="PaymentAclAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-cmd-legacy" target="api-pay" edge="1">
+                    <mxGeometry x="0.214" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="220" y="611"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e15" value="PaymentAclAdapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-cmd-target" target="api-pay" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="880" y="610"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-catalogue" target="db-cat" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="780" y="380"/>
+                            <mxPoint x="1210" y="380"/>
+                            <mxPoint x="1210" y="88"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-cmd-target" target="db-cmd" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="925" y="280"/>
+                            <mxPoint x="1260" y="280"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;" parent="1" source="c-stk-target" target="db-stk" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-cmd-legacy" target="db-legacy" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="240" y="400"/>
+                            <mxPoint x="1220" y="400"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=classic;dashed=1;" parent="1" source="c-stk-legacy" target="db-legacy" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="393" y="330"/>
+                            <mxPoint x="1190" y="330"/>
+                            <mxPoint x="1190" y="478"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="legend" value="Légende migration :&#10;— Plein = cible (Spring Boot, PostgreSQL dédié, CDC)&#10;— Pointillé = legacy (Node.js, PHP, ETL, BDD unique) — retiré progressivement V1→V4&#10;V1 : MessagingEventAdapter (async) | V2 : TargetStockAdapter | V3 : CdcReportingAdapter | V4 : GatewayFacade + TargetCommandesAdapter&#10;Réf. : 13-plan-integration.md" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="670" width="730" height="85" as="geometry"/>
+                </mxCell>
+                <mxCell id="bb" value="Building blocks : Docker | PostgreSQL | RabbitMQ | Debezium | Metabase | Spring Cloud Gateway | Couche découplage (Strangler Fig + ACL)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="40" y="780" width="900" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>
